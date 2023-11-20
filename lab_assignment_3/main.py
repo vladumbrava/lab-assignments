@@ -1,20 +1,17 @@
 from mypoint import MyPoint
 from pointrepo import PointRepository
-'''
-sa nu uit pt minimum si maximum distance sa fac sa se afiseze numarul si doar 2 zecimale (aproximand)
-'''
+
 
 def main():
-
     repository = PointRepository()
-    point1 = MyPoint(-1,-5,"red")
-    point2 = MyPoint(-10,2,"red")
-    point3 = MyPoint(4,6,"blue")
-    point4 = MyPoint(1,-2,"blue")
-    point5 = MyPoint(2,4,"blue")
-    point6 = MyPoint(-6,14,"yellow")
-    point7 = MyPoint(-20,6,"green")
-    pointlist = [point1,point2,point3,point4,point5,point6,point7]
+    point1 = MyPoint(-1, 5, "red")
+    point2 = MyPoint(-10, 2, "red")
+    point3 = MyPoint(4, 6, "blue")
+    point4 = MyPoint(1, -2, "blue")
+    point5 = MyPoint(2, 4, "blue")
+    point6 = MyPoint(-6, 14, "yellow")
+    point7 = MyPoint(-20, 6, "green")
+    pointlist = [point1, point2, point3, point4, point5, point6, point7]
 
     repository.set_list_of_points(pointlist)
 
@@ -61,7 +58,7 @@ def main():
         if choice == 3:
             try:
                 index = int(input("Please enter the index:"))
-                if 0 <= index <= len(repository.get_list_of_points())-1:
+                if 0 <= index <= len(repository.get_list_of_points()) - 1:
                     print(f"The point at index {index} is: {repository.get_point_given_index(index)}")
                 else:
                     print("Invalid input. Please enter an appropriate value for index.")
@@ -82,45 +79,51 @@ def main():
                         print(point)
 
         if choice == 5:
-            print("Enter the coordinates of the upper left corner of the square: ")
-            try:
-                corner_x = float(input("Enter the X: "))
-                corner_y = float(input("Enter the Y: "))
-            except ValueError:
-                print("Invalid input. Please enter proper coordinates.")
-                break
-            try:
-                length = float(input("Enter the length of the square: "))
-            except ValueError:
-                print("Invalid input. Please enter a proper length.")
-                break
-            print(repository.get_points_inside_square(MyPoint(corner_x,corner_y,None),length))
+            while True:
+                print("Enter the coordinates of the upper left corner of the square: ")
+                try:
+                    corner_x = float(input("Enter the X: "))
+                    corner_y = float(input("Enter the Y: "))
+                except ValueError:
+                    print("Invalid input. Please enter proper coordinates.")
+                    break
+                try:
+                    length = float(input("Enter the length of the square: "))
+                    print(repository.get_points_inside_square(MyPoint(corner_x, corner_y, None), length))
+                    break
+                except ValueError:
+                    print("Invalid input. Please enter a proper length.")
+                    break
 
         if choice == 6:
             print(f"The minimum distance between 2 points from our list is: {repository.get_min_dist_between_points()}")
 
         if choice == 7:
-            try:
-                index = int(input("Enter the index of the point: "))
-                if 0 <= index < len(repository.get_list_of_points()):
-                    try:
-                        updated_x = float(input("Enter the updated X: "))
-                        updated_y = float(input("Enter the updated Y: "))
-                    except ValueError:
-                        print("Invalid input. Please enter proper coordinates.")
+            while True:
+                try:
+                    index = int(input("Enter the index of the point: "))
+                    if 0 <= index < len(repository.get_list_of_points()):
+                        try:
+                            updated_x = float(input("Enter the updated X: "))
+                            updated_y = float(input("Enter the updated Y: "))
+                        except ValueError:
+                            print("Invalid input. Please enter proper coordinates.")
+                            break
+                        color = input("Enter the updated color: ")
+                        if color != "red" and color != "green" and color != "blue" and color != "yellow" and color != "magenta":
+                            print("Invalid input. Please enter proper properties.")
+                            break
+                        else:
+                            repository.update_point_given_index(index, updated_x, updated_y, color)
+                            print(f"The point at index {index} is now: ")
+                            print(repository.update_point_given_index(index, updated_x, updated_y, color))
+                            break
+                    else:
+                        print("Invalid input. Enter a proper index.")
                         break
-                    color = input("Enter the updated color: ")
-                    if color != "red" and color != "green" and color != "blue" and color != "yellow" and color != "magenta":
-                        print("Invalid input. Please enter proper properties.")
-                        break
-                else:
+                except ValueError:
                     print("Invalid input. Enter a proper index.")
-            except ValueError:
-                print("Invalid input. Enter a proper index.")
-                break
-            repository.update_point_given_index(index, updated_x, updated_y, color)
-            print(f"The point at index {index} is now: ")
-            print(repository.update_point_given_index(index, updated_x, updated_y, color))
+                    break
 
         if choice == 8:
             try:
@@ -137,17 +140,19 @@ def main():
             try:
                 corner_x = float(input("Enter the X: "))
                 corner_y = float(input("Enter the Y: "))
+                try:
+                    length = float(input("Enter the length of the square: "))
+                    points_removed = repository.delete_points_inside_square(MyPoint(corner_x, corner_y, None), length)
+                    print("The following points were removed: ")
+                    for point in points_removed:
+                        print(point)
+                except ValueError:
+                    print("Invalid input. Please enter a proper length.")
             except ValueError:
                 print("Invalid input. Please enter proper coordinates.")
 
-            try:
-                length = float(input("Enter the length of the square: "))
-            except ValueError:
-                print("Invalid input. Please enter a proper length.")
-
-            repository.delete_points_inside_square(MyPoint(corner_x,corner_y,None),length)
-
-        #if choice == 10:
+        if choice == 10:
+            repository.plot_all_points()
 
         if choice == 11:
 
@@ -155,34 +160,41 @@ def main():
             print("2. Get the maximum distance between 2 points")
             print("3. Shift all points on the X axis")
 
-            extra_choice = int(input("Enter your choice: "))
+            try:
+                extra_choice = int(input("Enter your choice: "))
+                if extra_choice in [1, 2, 3]:
+                    if extra_choice == 1:
+                        print("Enter the coordinates of the point: ")
+                        try:
+                            x = float(input("Enter the X: "))
+                            y = float(input("Enter the Y: "))
+                            try:
+                                distance = float(input("Enter the distance: "))
+                                points_removed = repository.extra_delete_points_within_distance_from_point(MyPoint(x, y, None), distance)
+                                print("The following points were removed: ")
+                                for point in points_removed:
+                                    print(point)
+                            except ValueError:
+                                print("Invalid input. Please enter a proper distance.")
+                        except ValueError:
+                            print("Invalid input. Please enter proper coordinates.")
 
-            if extra_choice == 1:
-                print("Enter the coordinates of the point: ")
-                try:
-                    x = float(input("Enter the X: "))
-                    y = float(input("Enter the Y: "))
-                except ValueError:
-                    print("Invalid input. Please enter proper coordinates.")
-                try:
-                    distance = float(input("Enter the distance: "))
-                except ValueError:
-                    print("Invalid input. Please enter a proper distance.")
-                repository.extra_delete_points_within_distance_from_point(MyPoint(x, y,None),distance)
+                    if extra_choice == 2:
+                        print(f"The maximum distance between 2 points from our list is: {repository.extra_maximum_distance_2_points()}")
 
-            if extra_choice == 2:
-                print(f"The maximum distance between 2 points from our list is: {repository.extra_maximum_distance_2_points()}")
+                    if extra_choice == 3:
+                        try:
+                            x_value = float(input("Enter the amount you want to shift the points by: "))
+                            repository.extra_shift_on_x(x_value)
+                        except ValueError:
+                            print("Invalid input. You should enter a proper value.")
+                else:
+                    print("Invalid input. Please choose a value between 1, 2 and 3.")
+            except ValueError:
+                print("Invalid input. Please enter a proper choice value.")
 
-            if extra_choice == 3:
-                try:
-                    x_value = float(input("Enter the amount you want to shift the points by: "))
-                except ValueError:
-                    print("Invalid input. You should enter a proper value.")
-                repository.extra_shift_on_x(x_value)
-
-
-
-
+        if choice == 12:
+            break
 
 
 if __name__ == "__main__":

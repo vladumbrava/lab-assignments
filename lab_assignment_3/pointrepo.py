@@ -1,6 +1,7 @@
 from math import sqrt
 import matplotlib.pyplot as plt
 
+
 class PointRepository:
     def __init__(self):
         self.points_list = []
@@ -44,7 +45,7 @@ class PointRepository:
                     dist = sqrt(pow(point2.coord_x - point1.coord_x, 2) + pow(point2.coord_y - point1.coord_y, 2))
                     if dist < min_distance:
                         min_distance = dist
-        return round(min_distance,2)
+        return round(min_distance, 2)
 
     def update_point_given_index(self, index, x, y, color):
         if 0 <= index < len(self.points_list):
@@ -66,6 +67,7 @@ class PointRepository:
 
         for point in points_to_remove:
             self.points_list.remove(point)
+        return points_to_remove
 
     def plot_all_points(self):
         colors = {'red': 'r', 'blue': 'b', 'black': 'k', 'green': 'g', 'yellow': 'y', 'purple': 'm', 'cyan': 'c',
@@ -90,6 +92,7 @@ class PointRepository:
                                     pow(given_point.coord_y - point.coord_y, 2)) <= distance]
         for point in points_to_remove:
             self.points_list.remove(point)
+        return points_to_remove
 
     def extra_maximum_distance_2_points(self):
         max_distance = sqrt(pow(self.points_list[1].coord_x - self.points_list[0].coord_x, 2) +
@@ -100,7 +103,7 @@ class PointRepository:
                     dist = sqrt(pow(point2.coord_x - point1.coord_x, 2) + pow(point2.coord_y - point1.coord_y, 2))
                     if dist > max_distance:
                         max_distance = dist
-        return round(max_distance,2)
+        return round(max_distance, 2)
 
     def extra_shift_on_x(self, x_value):
         for point in self.points_list:
